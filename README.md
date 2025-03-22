@@ -1,14 +1,14 @@
 # egg-mysql
 
 [![NPM version][npm-image]][npm-url]
-[![Node.js CI](https://github.com/eggjs/egg-mysql/actions/workflows/nodejs.yml/badge.svg)](https://github.com/eggjs/egg-mysql/actions/workflows/nodejs.yml)
+[![CI](https://github.com/eggjs/mysql/actions/workflows/nodejs.yml/badge.svg?branch=5.x)](https://github.com/eggjs/mysql/actions/workflows/nodejs.yml)
 [![Test coverage][codecov-image]][codecov-url]
 [![npm download][download-image]][download-url]
 
 [npm-image]: https://img.shields.io/npm/v/egg-mysql.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/egg-mysql
-[codecov-image]: https://img.shields.io/codecov/c/github/eggjs/egg-mysql.svg?style=flat-square
-[codecov-url]: https://codecov.io/github/eggjs/egg-mysql?branch=master
+[codecov-image]: https://img.shields.io/codecov/c/github/eggjs/mysql.svg?style=flat-square
+[codecov-url]: https://codecov.io/github/eggjs/mysql?branch=5.x
 [download-image]: https://img.shields.io/npm/dm/egg-mysql.svg?style=flat-square
 [download-url]: https://npmjs.org/package/egg-mysql
 
@@ -17,7 +17,7 @@ Aliyun rds client(support mysql protocol) for egg framework
 ## Install
 
 ```bash
-npm i egg-mysql --save
+npm i egg-mysql@5
 ```
 
 MySQL Plugin for egg, support egg application access to MySQL database.
@@ -249,7 +249,7 @@ Please open an issue [here](https://github.com/eggjs/egg/issues).
 
 ## Contributors
 
-[![Contributors](https://contrib.rocks/image?repo=eggjs/core)](https://github.com/eggjs/core/graphs/contributors)
+[![Contributors](https://contrib.rocks/image?repo=eggjs/mysql)](https://github.com/eggjs/mysql/graphs/contributors)
 
 Made with [contributors-img](https://contrib.rocks).
 

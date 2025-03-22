@@ -50,12 +50,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/eggjs/egg-mysql.git"
+    "url": "git+https://github.com/eggjs/mysql.git"
   },
   "bugs": {
     "url": "https://github.com/eggjs/egg/issues"
   },
-  "homepage": "https://github.com/eggjs/egg-mysql#readme",
+  "homepage": "https://github.com/eggjs/mysql#readme",
   "author": "jtyjty99999",
   "license": "MIT"
 }
