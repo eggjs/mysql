@@ -23,7 +23,9 @@ MySQL plugin for Egg.js
 npm i @eggjs/mysql
 ```
 
-MySQL Plugin for egg, support egg application access to MySQL database.
+MySQL Plugin for `egg@4`, support egg application access to MySQL database.
+
+> If you're using `egg@3`, please use `egg-mysql@5` instead.
 
 This plugin based on [@eggjs/rds], if you want to know specific usage, you should refer to the document of [@eggjs/rds].
 
