@@ -1,7 +1,34 @@
+import type { RDSClientOptions } from '@eggjs/rds';
+
+export type MySQLClientOptions = RDSClientOptions;
+
+export interface MySQLClientsOptions {
+  [clientName: string]: MySQLClientOptions;
+}
+
+export interface MySQLConfig {
+  default?: MySQLClientOptions;
+  /**
+   * load into app, default is `true`
+   */
+  app?: boolean;
+  /**
+   * load into agent, default is `false`
+   */
+  agent?: boolean;
+  /**
+   * single database
+   */
+  client?: MySQLClientOptions;
+  /**
+   * multi databases
+   */
+  clients?: MySQLClientsOptions;
+}
+
 export default {
   mysql: {
     default: {
-      database: null,
       connectionLimit: 5,
     },
     app: true,
@@ -33,5 +60,5 @@ export default {
     //     database: 'database',
     //   },
     // },
-  },
+  } satisfies MySQLConfig,
 };

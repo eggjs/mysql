@@ -1,10 +1,13 @@
-import { strict as assert } from 'node:assert';
+import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import path from 'node:path';
 import fs from 'node:fs';
-import mm, { MockApplication } from 'egg-mock';
-// import types from index.d.ts
-import type {} from '..';
+import { fileURLToPath } from 'node:url';
+
+import { mm, type MockApplication } from '@eggjs/mock';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 describe('test/mysql.test.ts', () => {
   let app: MockApplication;
@@ -111,7 +114,7 @@ describe('test/mysql.test.ts', () => {
 
   it('should escape value', () => {
     const val = app.mysql.escape('\'"?><=!@#');
-    assert(val === '\'\\\'\\"?><=!@#\'');
+    assert(val === String.raw`'\'\"?><=!@#'`);
   });
 
   it('should agent error when password wrong on multi clients', async () => {
@@ -120,12 +123,13 @@ describe('test/mysql.test.ts', () => {
     });
     await assert.rejects(async () => {
       await app.ready();
-    }, (err: any) => {
+    }, (err) => {
+      assert(err instanceof Error);
       assert.match(err.message, /Access denied for user/);
-      assert.equal(err.code, 'ER_ACCESS_DENIED_ERROR');
-      assert.equal(err.errno, 1045);
-      assert.equal(err.sqlState, '28000');
-      assert.match(err.sqlMessage, /^Access denied for user 'root'@'[^\']+' \(using password: YES\)$/);
+      assert.equal(Reflect.get(err, 'code'), 'ER_ACCESS_DENIED_ERROR');
+      assert.equal(Reflect.get(err, 'errno'), 1045);
+      assert.equal(Reflect.get(err, 'sqlState'), '28000');
+      assert.match(Reflect.get(err, 'sqlMessage'), /^Access denied for user 'root'@'[^']+' \(using password: YES\)$/);
       assert.equal(err.name, 'RDSClientGetConnectionError');
       return true;
     });
@@ -142,7 +146,7 @@ describe('test/mysql.test.ts', () => {
   });
 
   describe('config.mysql.agent = true', () => {
-    let app;
+    let app: MockApplication;
     before(() => {
       app = mm.cluster({
         baseDir: 'apps/mysqlapp',
@@ -159,7 +163,7 @@ describe('test/mysql.test.ts', () => {
   });
 
   describe('config.mysql.app = false', () => {
-    let app;
+    let app: MockApplication;
     before(() => {
       app = mm.app({
         baseDir: 'apps/mysqlapp-disable',
@@ -174,7 +178,7 @@ describe('test/mysql.test.ts', () => {
   });
 
   describe('newConfig', () => {
-    let app;
+    let app: MockApplication;
     before(() => {
       app = mm.cluster({
         baseDir: 'apps/mysqlapp-new',
@@ -197,8 +201,8 @@ describe('test/mysql.test.ts', () => {
     });
   });
 
-  describe('createInstance', () => {
-    let app;
+  describe('createInstanceAsync', () => {
+    let app: MockApplication;
     before(() => {
       app = mm.cluster({
         baseDir: 'apps/mysqlapp-dynamic',

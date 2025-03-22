@@ -1,16 +1,19 @@
-# egg-mysql
+# @eggjs/mysql
 
 [![NPM version][npm-image]][npm-url]
-[![Node.js CI](https://github.com/eggjs/egg-mysql/actions/workflows/nodejs.yml/badge.svg)](https://github.com/eggjs/egg-mysql/actions/workflows/nodejs.yml)
+[![CI](https://github.com/eggjs/mysql/actions/workflows/nodejs.yml/badge.svg?branch=master)](https://github.com/eggjs/mysql/actions/workflows/nodejs.yml)
 [![Test coverage][codecov-image]][codecov-url]
 [![npm download][download-image]][download-url]
+[![Node.js Version](https://img.shields.io/node/v/@eggjs/mysql.svg?style=flat)](https://nodejs.org/en/download/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://makeapullrequest.com)
+![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/eggjs/mysql)
 
-[npm-image]: https://img.shields.io/npm/v/egg-mysql.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/egg-mysql
-[codecov-image]: https://img.shields.io/codecov/c/github/eggjs/egg-mysql.svg?style=flat-square
-[codecov-url]: https://codecov.io/github/eggjs/egg-mysql?branch=master
-[download-image]: https://img.shields.io/npm/dm/egg-mysql.svg?style=flat-square
-[download-url]: https://npmjs.org/package/egg-mysql
+[npm-image]: https://img.shields.io/npm/v/@eggjs/mysql.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/@eggjs/mysql
+[codecov-image]: https://img.shields.io/codecov/c/github/eggjs/mysql.svg?style=flat-square
+[codecov-url]: https://codecov.io/github/eggjs/mysql?branch=master
+[download-image]: https://img.shields.io/npm/dm/@eggjs/mysql.svg?style=flat-square
+[download-url]: https://npmjs.org/package/@eggjs/mysql
 
 MySQL 插件是为 egg 提供 MySQL 数据库访问的功能
 
@@ -19,7 +22,7 @@ MySQL 插件是为 egg 提供 MySQL 数据库访问的功能
 ## 安装
 
 ```bash
-npm i egg-mysql --save
+npm i @eggjs/mysql
 ```
 
 ## 配置
@@ -30,7 +33,7 @@ npm i egg-mysql --save
 export default {
   mysql: {
     enable: true,
-    package: 'egg-mysql',
+    package: '@eggjs/mysql',
   },
 }
 ```
@@ -119,22 +122,22 @@ await client2.query(sql, values);
 
 #### app.mysql
 
-如果开启了 `config.mysql.app = true`，则会在 app 上注入 [@eggjs/rds] 客户端 的 [Singleton 单例](https://github.com/eggjs/egg/blob/master/lib/core/singleton.js)。
+如果开启了 `config.mysql.app = true`，则会在 app 上注入 [@eggjs/rds] 客户端 的 [Singleton 单例](https://github.com/eggjs/core/blob/master/src/singleton.ts)。
 
 ```ts
 await app.mysql.query(sql);
-await app.mysqls.get('db1').query(sql);
+await app.mysqls.getSingletonInstance('db1').query(sql);
 ```
 
 ### Agent
 
 #### agent.mysql
 
-如果开启了 `config.mysql.agent = true`，则会在 agent 上注入 [@eggjs/rds] 客户端 的 [Singleton 单例](https://github.com/eggjs/egg/blob/master/lib/core/singleton.js)。
+如果开启了 `config.mysql.agent = true`，则会在 agent 上注入 [@eggjs/rds] 客户端 的 [Singleton 单例](https://github.com/eggjs/core/blob/master/src/singleton.ts)。
 
 ```ts
 await agent.mysql.query(sql);
-await agent.mysqls.get('db1').query(sql);
+await agent.mysqls.getSingletonInstance('db1').query(sql);
 ```
 
 ## CRUD 使用指南
@@ -236,7 +239,7 @@ const results = await app.mysql.query('update posts set hits = (hits + ?) where 
 
 #### 内置表达式
 
-- NOW(): 数据库当前系统时间，通过`app.mysql.literals.now`获取。
+- `NOW()`: 数据库当前系统时间，通过 `app.mysql.literals.now` 获取。
 
 ```ts
 await app.mysql.insert(table, {
@@ -248,7 +251,7 @@ await app.mysql.insert(table, {
 
 #### 自定义表达式
 
-下例展示了如何调用mysql内置的`CONCAT(s1, ...sn)`函数，做字符串拼接。
+下例展示了如何调用mysql内置的 `CONCAT(s1, ...sn)` 函数，做字符串拼接。
 
 ```ts
 const Literal = app.mysql.literals.Literal;
@@ -264,7 +267,7 @@ await app.mysql.insert(table, {
 
 ## Questions & Suggestions
 
-Please open an issue [here](https://github.com/eggjs/egg/issues).
+Please open an issue [here](https://github.com/eggjs/mysql/issues).
 
 ## License
 
@@ -272,7 +275,7 @@ Please open an issue [here](https://github.com/eggjs/egg/issues).
 
 ## Contributors
 
-[![Contributors](https://contrib.rocks/image?repo=eggjs/core)](https://github.com/eggjs/core/graphs/contributors)
+[![Contributors](https://contrib.rocks/image?repo=eggjs/mysql)](https://github.com/eggjs/mysql/graphs/contributors)
 
 Made with [contributors-img](https://contrib.rocks).
 

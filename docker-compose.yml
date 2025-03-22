@@ -1,0 +1,17 @@
+name: eggjs_mysql_dev_services_mysql
+
+services:
+  mysql:
+    image: mysql:9
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-}
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-test}
+    ports:
+      - 3306:3306
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped

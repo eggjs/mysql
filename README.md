@@ -1,23 +1,26 @@
-# egg-mysql
+# @eggjs/mysql
 
 [![NPM version][npm-image]][npm-url]
-[![Node.js CI](https://github.com/eggjs/egg-mysql/actions/workflows/nodejs.yml/badge.svg)](https://github.com/eggjs/egg-mysql/actions/workflows/nodejs.yml)
+[![CI](https://github.com/eggjs/mysql/actions/workflows/nodejs.yml/badge.svg?branch=master)](https://github.com/eggjs/mysql/actions/workflows/nodejs.yml)
 [![Test coverage][codecov-image]][codecov-url]
 [![npm download][download-image]][download-url]
+[![Node.js Version](https://img.shields.io/node/v/@eggjs/mysql.svg?style=flat)](https://nodejs.org/en/download/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://makeapullrequest.com)
+![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/eggjs/mysql)
 
-[npm-image]: https://img.shields.io/npm/v/egg-mysql.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/egg-mysql
-[codecov-image]: https://img.shields.io/codecov/c/github/eggjs/egg-mysql.svg?style=flat-square
-[codecov-url]: https://codecov.io/github/eggjs/egg-mysql?branch=master
-[download-image]: https://img.shields.io/npm/dm/egg-mysql.svg?style=flat-square
-[download-url]: https://npmjs.org/package/egg-mysql
+[npm-image]: https://img.shields.io/npm/v/@eggjs/mysql.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/@eggjs/mysql
+[codecov-image]: https://img.shields.io/codecov/c/github/eggjs/mysql.svg?style=flat-square
+[codecov-url]: https://codecov.io/github/eggjs/mysql?branch=master
+[download-image]: https://img.shields.io/npm/dm/@eggjs/mysql.svg?style=flat-square
+[download-url]: https://npmjs.org/package/@eggjs/mysql
 
-Aliyun rds client(support mysql protocol) for egg framework
+MySQL plugin for Egg.js
 
 ## Install
 
 ```bash
-npm i egg-mysql --save
+npm i @eggjs/mysql
 ```
 
 MySQL Plugin for egg, support egg application access to MySQL database.
@@ -32,7 +35,7 @@ Change `${app_root}/config/plugin.ts` to enable MySQL plugin:
 export default {
   mysql: {
     enable: true,
-    package: 'egg-mysql',
+    package: '@eggjs/mysql',
   },
 }
 ```
@@ -57,9 +60,9 @@ export default {
       // database
       database: 'test',
     },
-    // load into app, default is open
+    // load into app, default is `true`
     app: true,
-    // load into agent, default is close
+    // load into agent, default is `false`
     agent: false,
   },
 }
@@ -107,10 +110,10 @@ export default {
 Usage:
 
 ```ts
-const client1 = app.mysqls.get('db1');
+const client1 = app.mysqls.getSingletonInstance('db1');
 await client1.query(sql, values);
 
-const client2 = app.mysqls.get('db2');
+const client2 = app.mysqls.getSingletonInstance('db2');
 await client2.query(sql, values);
 ```
 
@@ -239,9 +242,30 @@ await app.mysql.insert(table, {
 // INSERT INTO `$table`(`id`, `fullname`) VALUES(123, CONCAT("James", "Bond"))
 ```
 
+## For the local dev
+
+Run docker compose to start test mysql service
+
+```bash
+docker compose -f docker-compose.yml up -d
+# if you run the first time, should wait for ~20s to let mysql service init started
+```
+
+Run the unit tests
+
+```bash
+npm test
+```
+
+Stop test mysql service
+
+```bash
+docker compose -f docker-compose.yml down
+```
+
 ## Questions & Suggestions
 
-Please open an issue [here](https://github.com/eggjs/egg/issues).
+Please open an issue [here](https://github.com/eggjs/mysql/issues).
 
 ## License
 
@@ -249,7 +273,7 @@ Please open an issue [here](https://github.com/eggjs/egg/issues).
 
 ## Contributors
 
-[![Contributors](https://contrib.rocks/image?repo=eggjs/core)](https://github.com/eggjs/core/graphs/contributors)
+[![Contributors](https://contrib.rocks/image?repo=eggjs/mysql)](https://github.com/eggjs/mysql/graphs/contributors)
 
 Made with [contributors-img](https://contrib.rocks).
 
