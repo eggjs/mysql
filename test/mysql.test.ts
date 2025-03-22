@@ -4,6 +4,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
+import snapshot from 'snap-shot-it';
 import { mm, type MockApplication } from '@eggjs/mock';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -43,6 +44,10 @@ describe('test/mysql.test.ts', () => {
   });
 
   afterEach(mm.restore);
+
+  it('should make default config stable', () => {
+    snapshot(app.config.mysql);
+  });
 
   it('should query mysql user table success', () => {
     return app.httpRequest()

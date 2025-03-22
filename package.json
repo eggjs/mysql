@@ -47,6 +47,7 @@
     "egg": "^4.0.10",
     "oxlint": "^0.16.2",
     "rimraf": "6",
+    "snap-shot-it": "^7.9.10",
     "tshy": "3",
     "tshy-after": "1",
     "typescript": "5"

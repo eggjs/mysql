@@ -137,5 +137,5 @@
     "jsdoc/require-returns": "allow",
     "jsdoc/require-param": "allow"
   },
-  "ignorePatterns": ["index.d.ts", "test/fixtures/**"]
+  "ignorePatterns": ["index.d.ts", "test/fixtures/**", "__snapshots__"]
 }
