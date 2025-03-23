@@ -1,3 +1,9 @@
-module.exports = function(app) {
-  app.mysql1 = app.mysql.createInstance(app.config.mysql1);
-};
+module.exports = class Boot {
+  constructor(app) {
+    this.app = app;
+  }
+
+  async didReady() {
+    this.app.mysql1 = await this.app.mysql.createInstanceAsync(this.app.config.mysql1);
+  }
+}

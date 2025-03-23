@@ -1,12 +1,12 @@
 exports.mysql = {
   client: {
-	  host: '127.0.0.1',
-	  port: 3306,
-	  user: 'root',
-	  password: '',
-	  database: 'test'
+    host: '127.0.0.1',
+    port: 3306,
+    user: 'root',
+    password: '',
+    database: 'test',
   },
-  agent: true
+  agent: true,
 };
 
 exports.keys = 'foo';

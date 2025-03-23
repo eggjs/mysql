@@ -4,7 +4,7 @@ exports.mysql = {
   user: 'root',
   password: '',
   database: 'test',
-  app:false
+  app: false,
 };
 
 exports.keys = 'foo';

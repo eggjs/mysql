@@ -1,16 +1,19 @@
-# egg-mysql
+# @eggjs/mysql
 
 [![NPM version][npm-image]][npm-url]
-[![Node.js CI](https://github.com/eggjs/egg-mysql/actions/workflows/nodejs.yml/badge.svg)](https://github.com/eggjs/egg-mysql/actions/workflows/nodejs.yml)
+[![CI](https://github.com/eggjs/mysql/actions/workflows/nodejs.yml/badge.svg?branch=master)](https://github.com/eggjs/mysql/actions/workflows/nodejs.yml)
 [![Test coverage][codecov-image]][codecov-url]
 [![npm download][download-image]][download-url]
+[![Node.js Version](https://img.shields.io/node/v/@eggjs/mysql.svg?style=flat)](https://nodejs.org/en/download/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://makeapullrequest.com)
+![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/eggjs/mysql)
 
-[npm-image]: https://img.shields.io/npm/v/egg-mysql.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/egg-mysql
-[codecov-image]: https://img.shields.io/codecov/c/github/eggjs/egg-mysql.svg?style=flat-square
-[codecov-url]: https://codecov.io/github/eggjs/egg-mysql?branch=master
-[download-image]: https://img.shields.io/npm/dm/egg-mysql.svg?style=flat-square
-[download-url]: https://npmjs.org/package/egg-mysql
+[npm-image]: https://img.shields.io/npm/v/@eggjs/mysql.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/@eggjs/mysql
+[codecov-image]: https://img.shields.io/codecov/c/github/eggjs/mysql.svg?style=flat-square
+[codecov-url]: https://codecov.io/github/eggjs/mysql?branch=master
+[download-image]: https://img.shields.io/npm/dm/@eggjs/mysql.svg?style=flat-square
+[download-url]: https://npmjs.org/package/@eggjs/mysql
 
 MySQL 插件是为 egg 提供 MySQL 数据库访问的功能
 
@@ -19,7 +22,7 @@ MySQL 插件是为 egg 提供 MySQL 数据库访问的功能
 ## 安装
 
 ```bash
-npm i egg-mysql --save
+npm i @eggjs/mysql
 ```
 
 ## 配置
@@ -30,9 +33,9 @@ npm i egg-mysql --save
 export default {
   mysql: {
     enable: true,
-    package: 'egg-mysql',
+    package: '@eggjs/mysql',
   },
-}
+};
 ```
 
 在 `config/config.${env}.ts` 配置各个环境的数据库连接信息：
@@ -53,14 +56,14 @@ export default {
       // 密码
       password: 'test_password',
       // 数据库名
-      database: 'test',    
+      database: 'test',
     },
     // 是否加载到 app 上，默认开启
     app: true,
     // 是否加载到 agent 上，默认关闭
     agent: false,
   },
-}
+};
 ```
 
 使用方式：
@@ -91,16 +94,14 @@ export default {
       // ...
     },
     // 所有数据库配置的默认值
-    default: {
-
-    },
+    default: {},
 
     // 是否加载到 app 上，默认开启
     app: true,
     // 是否加载到 agent 上，默认关闭
     agent: false,
   },
-}
+};
 ```
 
 使用方式：
@@ -119,22 +120,22 @@ await client2.query(sql, values);
 
 #### app.mysql
 
-如果开启了 `config.mysql.app = true`，则会在 app 上注入 [@eggjs/rds] 客户端 的 [Singleton 单例](https://github.com/eggjs/egg/blob/master/lib/core/singleton.js)。
+如果开启了 `config.mysql.app = true`，则会在 app 上注入 [@eggjs/rds] 客户端 的 [Singleton 单例](https://github.com/eggjs/core/blob/master/src/singleton.ts)。
 
 ```ts
 await app.mysql.query(sql);
-await app.mysqls.get('db1').query(sql);
+await app.mysqls.getSingletonInstance('db1').query(sql);
 ```
 
 ### Agent
 
 #### agent.mysql
 
-如果开启了 `config.mysql.agent = true`，则会在 agent 上注入 [@eggjs/rds] 客户端 的 [Singleton 单例](https://github.com/eggjs/egg/blob/master/lib/core/singleton.js)。
+如果开启了 `config.mysql.agent = true`，则会在 agent 上注入 [@eggjs/rds] 客户端 的 [Singleton 单例](https://github.com/eggjs/core/blob/master/src/singleton.ts)。
 
 ```ts
 await agent.mysql.query(sql);
-await agent.mysqls.get('db1').query(sql);
+await agent.mysqls.getSingletonInstance('db1').query(sql);
 ```
 
 ## CRUD 使用指南
@@ -153,11 +154,14 @@ const insertSuccess = result.affectedRows === 1;
 // 获得一个
 const post = await app.mysql.get('posts', { id: 12 });
 // 查询
-const results = await app.mysql.select('posts',{
+const results = await app.mysql.select('posts', {
   where: { status: 'draft' },
-  orders: [['created_at','desc'], ['id','desc']],
+  orders: [
+    ['created_at', 'desc'],
+    ['id', 'desc'],
+  ],
   limit: 10,
-  offset: 0
+  offset: 0,
 });
 ```
 
@@ -179,7 +183,7 @@ const updateSuccess = result.affectedRows === 1;
 
 ```ts
 const result = await app.mysql.delete('table-name', {
-  name: 'fengmk2'
+  name: 'fengmk2',
 });
 ```
 
@@ -213,7 +217,7 @@ try {
 - 缺点：整个事务要么成功，要么失败，无法做细粒度控制。
 
 ```ts
-const result = await app.mysql.beginTransactionScope(async (conn) => {
+const result = await app.mysql.beginTransactionScope(async conn => {
   // don't commit or rollback by yourself
   await conn.insert(table, row1);
   await conn.update(table, row2);
@@ -227,7 +231,10 @@ const result = await app.mysql.beginTransactionScope(async (conn) => {
 ### 自定义SQL拼接
 
 ```ts
-const results = await app.mysql.query('update posts set hits = (hits + ?) where id = ?', [1, postId]);
+const results = await app.mysql.query(
+  'update posts set hits = (hits + ?) where id = ?',
+  [1, postId]
+);
 ```
 
 ### 表达式(Literal)
@@ -236,11 +243,11 @@ const results = await app.mysql.query('update posts set hits = (hits + ?) where 
 
 #### 内置表达式
 
-- NOW(): 数据库当前系统时间，通过`app.mysql.literals.now`获取。
+- `NOW()`: 数据库当前系统时间，通过 `app.mysql.literals.now` 获取。
 
 ```ts
 await app.mysql.insert(table, {
-  create_time: app.mysql.literals.now
+  create_time: app.mysql.literals.now,
 });
 
 // INSERT INTO `$table`(`create_time`) VALUES(NOW())
@@ -248,7 +255,7 @@ await app.mysql.insert(table, {
 
 #### 自定义表达式
 
-下例展示了如何调用mysql内置的`CONCAT(s1, ...sn)`函数，做字符串拼接。
+下例展示了如何调用mysql内置的 `CONCAT(s1, ...sn)` 函数，做字符串拼接。
 
 ```ts
 const Literal = app.mysql.literals.Literal;
@@ -264,7 +271,7 @@ await app.mysql.insert(table, {
 
 ## Questions & Suggestions
 
-Please open an issue [here](https://github.com/eggjs/egg/issues).
+Please open an issue [here](https://github.com/eggjs/mysql/issues).
 
 ## License
 
@@ -272,7 +279,7 @@ Please open an issue [here](https://github.com/eggjs/egg/issues).
 
 ## Contributors
 
-[![Contributors](https://contrib.rocks/image?repo=eggjs/core)](https://github.com/eggjs/core/graphs/contributors)
+[![Contributors](https://contrib.rocks/image?repo=eggjs/mysql)](https://github.com/eggjs/mysql/graphs/contributors)
 
 Made with [contributors-img](https://contrib.rocks).
 
