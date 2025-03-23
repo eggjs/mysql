@@ -45,7 +45,9 @@
     "@types/mocha": "10",
     "@types/node": "22",
     "egg": "^4.0.10",
+    "lint-staged": "^15.5.0",
     "oxlint": "^0.16.2",
+    "prettier": "^3.5.3",
     "rimraf": "6",
     "snap-shot-it": "^7.9.10",
     "tshy": "3",
@@ -61,6 +63,13 @@
     "postci": "npm run prepublishOnly && npm run clean",
     "clean": "rimraf dist",
     "prepublishOnly": "tshy && tshy-after && attw --pack"
+  },
+  "lint-staged": {
+    "*": "prettier --write --ignore-unknown --cache",
+    "*.{ts,js}": [
+      "prettier --ignore-unknown --write",
+      "oxlint --fix"
+    ]
   },
   "type": "module",
   "tshy": {

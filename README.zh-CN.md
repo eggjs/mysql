@@ -35,7 +35,7 @@ export default {
     enable: true,
     package: '@eggjs/mysql',
   },
-}
+};
 ```
 
 在 `config/config.${env}.ts` 配置各个环境的数据库连接信息：
@@ -56,14 +56,14 @@ export default {
       // 密码
       password: 'test_password',
       // 数据库名
-      database: 'test',    
+      database: 'test',
     },
     // 是否加载到 app 上，默认开启
     app: true,
     // 是否加载到 agent 上，默认关闭
     agent: false,
   },
-}
+};
 ```
 
 使用方式：
@@ -94,16 +94,14 @@ export default {
       // ...
     },
     // 所有数据库配置的默认值
-    default: {
-
-    },
+    default: {},
 
     // 是否加载到 app 上，默认开启
     app: true,
     // 是否加载到 agent 上，默认关闭
     agent: false,
   },
-}
+};
 ```
 
 使用方式：
@@ -156,11 +154,14 @@ const insertSuccess = result.affectedRows === 1;
 // 获得一个
 const post = await app.mysql.get('posts', { id: 12 });
 // 查询
-const results = await app.mysql.select('posts',{
+const results = await app.mysql.select('posts', {
   where: { status: 'draft' },
-  orders: [['created_at','desc'], ['id','desc']],
+  orders: [
+    ['created_at', 'desc'],
+    ['id', 'desc'],
+  ],
   limit: 10,
-  offset: 0
+  offset: 0,
 });
 ```
 
@@ -182,7 +183,7 @@ const updateSuccess = result.affectedRows === 1;
 
 ```ts
 const result = await app.mysql.delete('table-name', {
-  name: 'fengmk2'
+  name: 'fengmk2',
 });
 ```
 
@@ -216,7 +217,7 @@ try {
 - 缺点：整个事务要么成功，要么失败，无法做细粒度控制。
 
 ```ts
-const result = await app.mysql.beginTransactionScope(async (conn) => {
+const result = await app.mysql.beginTransactionScope(async conn => {
   // don't commit or rollback by yourself
   await conn.insert(table, row1);
   await conn.update(table, row2);
@@ -230,7 +231,10 @@ const result = await app.mysql.beginTransactionScope(async (conn) => {
 ### 自定义SQL拼接
 
 ```ts
-const results = await app.mysql.query('update posts set hits = (hits + ?) where id = ?', [1, postId]);
+const results = await app.mysql.query(
+  'update posts set hits = (hits + ?) where id = ?',
+  [1, postId]
+);
 ```
 
 ### 表达式(Literal)
@@ -243,7 +247,7 @@ const results = await app.mysql.query('update posts set hits = (hits + ?) where 
 
 ```ts
 await app.mysql.insert(table, {
-  create_time: app.mysql.literals.now
+  create_time: app.mysql.literals.now,
 });
 
 // INSERT INTO `$table`(`create_time`) VALUES(NOW())

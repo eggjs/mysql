@@ -24,10 +24,18 @@ describe('test/mysql.test.ts', () => {
   beforeEach(async () => {
     // init test datas
     try {
-      await app.mysql.query(`insert into npm_auth set user_id = 'egg-${uid}-1', password = '1'`);
-      await app.mysql.query(`insert into npm_auth set user_id = 'egg-${uid}-2', password = '2'`);
-      await app.mysql.query(`insert into npm_auth set user_id = 'egg-${uid}-3', password = '3'`);
-      await app.mysql.queryOne(`select * from npm_auth where user_id = 'egg-${uid}-3'`);
+      await app.mysql.query(
+        `insert into npm_auth set user_id = 'egg-${uid}-1', password = '1'`
+      );
+      await app.mysql.query(
+        `insert into npm_auth set user_id = 'egg-${uid}-2', password = '2'`
+      );
+      await app.mysql.query(
+        `insert into npm_auth set user_id = 'egg-${uid}-3', password = '3'`
+      );
+      await app.mysql.queryOne(
+        `select * from npm_auth where user_id = 'egg-${uid}-3'`
+      );
     } catch (err) {
       console.log('init test datas error: %s', err);
     }
@@ -35,7 +43,9 @@ describe('test/mysql.test.ts', () => {
 
   afterEach(async () => {
     // 清空测试数据
-    await app.mysql.query(`delete from npm_auth where user_id like 'egg-${uid}%'`);
+    await app.mysql.query(
+      `delete from npm_auth where user_id like 'egg-${uid}%'`
+    );
   });
 
   after(async () => {
@@ -50,17 +60,17 @@ describe('test/mysql.test.ts', () => {
   });
 
   it('should query mysql user table success', () => {
-    return app.httpRequest()
-      .get('/')
-      .expect(200);
+    return app.httpRequest().get('/').expect(200);
   });
 
   it('should query limit 2', async () => {
-    const users = await app.mysql.query('select * from npm_auth order by id desc limit 2');
+    const users = await app.mysql.query(
+      'select * from npm_auth order by id desc limit 2'
+    );
     assert(users.length === 2);
 
     const rows = await app.mysql.select('npm_auth', {
-      orders: [[ 'id', 'desc' ]],
+      orders: [['id', 'desc']],
       limit: 2,
     });
     assert(rows.length === 2);
@@ -69,19 +79,28 @@ describe('test/mysql.test.ts', () => {
   });
 
   it('should update successfully', async () => {
-    const user = await app.mysql.queryOne('select * from npm_auth order by id desc limit 10');
-    const result = await app.mysql.update('npm_auth', { id: user.id, user_id: `79744-${uid}-update` });
+    const user = await app.mysql.queryOne(
+      'select * from npm_auth order by id desc limit 10'
+    );
+    const result = await app.mysql.update('npm_auth', {
+      id: user.id,
+      user_id: `79744-${uid}-update`,
+    });
     assert(result.affectedRows === 1);
   });
 
   it('should delete successfully', async () => {
-    const user = await app.mysql.queryOne('select * from npm_auth order by id desc limit 10');
+    const user = await app.mysql.queryOne(
+      'select * from npm_auth order by id desc limit 10'
+    );
     const result = await app.mysql.delete('npm_auth', { id: user.id });
     assert(result.affectedRows === 1);
   });
 
   it('should query one success', async () => {
-    const user = await app.mysql.queryOne('select * from npm_auth order by id desc limit 10');
+    const user = await app.mysql.queryOne(
+      'select * from npm_auth order by id desc limit 10'
+    );
     assert(user);
     assert(typeof user.user_id === 'string' && user.user_id);
 
@@ -90,7 +109,9 @@ describe('test/mysql.test.ts', () => {
   });
 
   it('should query one desc is NULL success', async () => {
-    const user = await app.mysql.queryOne('select * from npm_auth where `desc` is NULL');
+    const user = await app.mysql.queryOne(
+      'select * from npm_auth where `desc` is NULL'
+    );
     assert(user);
     assert(typeof user.user_id === 'string' && user.user_id);
 
@@ -99,7 +120,9 @@ describe('test/mysql.test.ts', () => {
   });
 
   it('should query with literal in where conditions', async () => {
-    const user = await app.mysql.queryOne('select * from npm_auth where `password` is not NULL');
+    const user = await app.mysql.queryOne(
+      'select * from npm_auth where `password` is not NULL'
+    );
     assert(user);
     assert(typeof user.user_id === 'string' && user.user_id);
 
@@ -126,23 +149,31 @@ describe('test/mysql.test.ts', () => {
     const app = mm.app({
       baseDir: 'apps/mysqlapp-multi-client-wrong',
     });
-    await assert.rejects(async () => {
-      await app.ready();
-    }, (err) => {
-      assert(err instanceof Error);
-      assert.match(err.message, /Access denied for user/);
-      assert.equal(Reflect.get(err, 'code'), 'ER_ACCESS_DENIED_ERROR');
-      assert.equal(Reflect.get(err, 'errno'), 1045);
-      assert.equal(Reflect.get(err, 'sqlState'), '28000');
-      assert.match(Reflect.get(err, 'sqlMessage'), /^Access denied for user 'root'@'[^']+' \(using password: YES\)$/);
-      assert.equal(err.name, 'RDSClientGetConnectionError');
-      return true;
-    });
+    await assert.rejects(
+      async () => {
+        await app.ready();
+      },
+      err => {
+        assert(err instanceof Error);
+        assert.match(err.message, /Access denied for user/);
+        assert.equal(Reflect.get(err, 'code'), 'ER_ACCESS_DENIED_ERROR');
+        assert.equal(Reflect.get(err, 'errno'), 1045);
+        assert.equal(Reflect.get(err, 'sqlState'), '28000');
+        assert.match(
+          Reflect.get(err, 'sqlMessage'),
+          /^Access denied for user 'root'@'[^']+' \(using password: YES\)$/
+        );
+        assert.equal(err.name, 'RDSClientGetConnectionError');
+        return true;
+      }
+    );
   });
 
   it('should queryOne work on transaction', async () => {
     const result = await app.mysql.beginTransactionScope(async conn => {
-      const row = await conn.queryOne('select * from npm_auth order by id desc limit 10');
+      const row = await conn.queryOne(
+        'select * from npm_auth order by id desc limit 10'
+      );
       return { row };
     });
     assert(result.row);
@@ -161,9 +192,15 @@ describe('test/mysql.test.ts', () => {
     after(() => app.close());
 
     it('should agent.mysql work', () => {
-      const result = fs.readFileSync(path.join(__dirname,
-        './fixtures/apps/mysqlapp/run/agent_result.json'), 'utf8');
-      assert(/\[\{"currentTime":"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z"\}\]/.test(result));
+      const result = fs.readFileSync(
+        path.join(__dirname, './fixtures/apps/mysqlapp/run/agent_result.json'),
+        'utf8'
+      );
+      assert(
+        /\[\{"currentTime":"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z"\}\]/.test(
+          result
+        )
+      );
     });
   });
 
@@ -194,15 +231,22 @@ describe('test/mysql.test.ts', () => {
     after(() => app.close());
 
     it('should new config agent.mysql work', () => {
-      const result = fs.readFileSync(path.join(__dirname,
-        './fixtures/apps/mysqlapp-new/run/agent_result.json'), 'utf8');
-      assert(/\[\{"currentTime":"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z"\}\]/.test(result));
+      const result = fs.readFileSync(
+        path.join(
+          __dirname,
+          './fixtures/apps/mysqlapp-new/run/agent_result.json'
+        ),
+        'utf8'
+      );
+      assert(
+        /\[\{"currentTime":"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z"\}\]/.test(
+          result
+        )
+      );
     });
 
     it('should query mysql user table success', () => {
-      return app.httpRequest()
-        .get('/')
-        .expect(200);
+      return app.httpRequest().get('/').expect(200);
     });
   });
 
@@ -218,15 +262,22 @@ describe('test/mysql.test.ts', () => {
     after(() => app.close());
 
     it('should new config agent.mysql work', () => {
-      const result = fs.readFileSync(path.join(__dirname,
-        './fixtures/apps/mysqlapp-dynamic/run/agent_result.json'), 'utf8');
-      assert(/\[\{"currentTime":"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z"\}\]/.test(result));
+      const result = fs.readFileSync(
+        path.join(
+          __dirname,
+          './fixtures/apps/mysqlapp-dynamic/run/agent_result.json'
+        ),
+        'utf8'
+      );
+      assert(
+        /\[\{"currentTime":"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z"\}\]/.test(
+          result
+        )
+      );
     });
 
     it('should query mysql user table success', () => {
-      return app.httpRequest()
-        .get('/')
-        .expect(200);
+      return app.httpRequest().get('/').expect(200);
     });
   });
 });

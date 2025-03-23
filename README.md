@@ -39,7 +39,7 @@ export default {
     enable: true,
     package: '@eggjs/mysql',
   },
-}
+};
 ```
 
 Configure database information in `${app_root}/config/config.default.ts`:
@@ -67,7 +67,7 @@ export default {
     // load into agent, default is `false`
     agent: false,
   },
-}
+};
 ```
 
 Usage:
@@ -98,15 +98,13 @@ export default {
       // ...
     },
     // default configuration for all databases
-    default: {
-
-    },
+    default: {},
     // load into app, default is open
     app: true,
     // load into agent, default is close
     agent: false,
   },
-}
+};
 ```
 
 Usage:
@@ -135,11 +133,14 @@ const insertSuccess = result.affectedRows === 1;
 // get
 const post = await app.mysql.get('posts', { id: 12 });
 // query
-const results = await app.mysql.select('posts',{
+const results = await app.mysql.select('posts', {
   where: { status: 'draft' },
-  orders: [['created_at','desc'], ['id','desc']],
+  orders: [
+    ['created_at', 'desc'],
+    ['id', 'desc'],
+  ],
   limit: 10,
-  offset: 0
+  offset: 0,
 });
 ```
 
@@ -195,7 +196,7 @@ try {
 - disadvantage: all transation will be successful or failed, cannot control precisely
 
 ```ts
-const result = await app.mysql.beginTransactionScope(async (conn) => {
+const result = await app.mysql.beginTransactionScope(async conn => {
   // don't commit or rollback by yourself
   await conn.insert(table, row1);
   await conn.update(table, row2);
@@ -209,7 +210,10 @@ const result = await app.mysql.beginTransactionScope(async (conn) => {
 ### Custom SQL splicing
 
 ```ts
-const results = await app.mysql.query('update posts set hits = (hits + ?) where id = ?', [ 1, postId ]);
+const results = await app.mysql.query(
+  'update posts set hits = (hits + ?) where id = ?',
+  [1, postId]
+);
 ```
 
 ### Literal

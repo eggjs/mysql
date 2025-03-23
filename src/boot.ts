@@ -1,14 +1,27 @@
 import { RDSClient, type RDSClientOptions } from '@eggjs/rds';
 import type { EggCore, ILifecycleBoot } from '@eggjs/core';
 
-async function createMySQLClient(config: RDSClientOptions, app: EggCore, clientName = 'default') {
-  app.coreLogger.info('[@eggjs/mysql] clientName[%s] connecting %s@%s:%s/%s',
-    clientName, config.user, config.host, config.port, config.database);
+async function createMySQLClient(
+  config: RDSClientOptions,
+  app: EggCore,
+  clientName = 'default'
+) {
+  app.coreLogger.info(
+    '[@eggjs/mysql] clientName[%s] connecting %s@%s:%s/%s',
+    clientName,
+    config.user,
+    config.host,
+    config.port,
+    config.database
+  );
   const client = new RDSClient(config);
 
   const rows = await client.query('select now() as currentTime;');
-  app.coreLogger.info('[@eggjs/mysql] clientName[%s] status OK, MySQL Server currentTime: %j',
-    clientName, rows[0].currentTime);
+  app.coreLogger.info(
+    '[@eggjs/mysql] clientName[%s] status OK, MySQL Server currentTime: %j',
+    clientName,
+    rows[0].currentTime
+  );
   return client;
 }
 

@@ -16,25 +16,32 @@ describe('test/esm.test.ts', () => {
 
   beforeEach(async () => {
     // init test datas
-    await app.mysql.query(`insert into npm_auth set user_id = 'egg-${uid}-1', password = '1'`);
-    await app.mysql.query(`insert into npm_auth set user_id = 'egg-${uid}-2', password = '2'`);
-    await app.mysql.query(`insert into npm_auth set user_id = 'egg-${uid}-3', password = '3'`);
-    await app.mysql.queryOne(`select * from npm_auth where user_id = 'egg-${uid}-3'`);
+    await app.mysql.query(
+      `insert into npm_auth set user_id = 'egg-${uid}-1', password = '1'`
+    );
+    await app.mysql.query(
+      `insert into npm_auth set user_id = 'egg-${uid}-2', password = '2'`
+    );
+    await app.mysql.query(
+      `insert into npm_auth set user_id = 'egg-${uid}-3', password = '3'`
+    );
+    await app.mysql.queryOne(
+      `select * from npm_auth where user_id = 'egg-${uid}-3'`
+    );
   });
 
   afterEach(async () => {
-    await app.mysql.query(`delete from npm_auth where user_id like 'egg-${uid}%'`);
+    await app.mysql.query(
+      `delete from npm_auth where user_id like 'egg-${uid}%'`
+    );
   });
 
   after(async () => {
     await app.close();
   });
 
-
   it('should query mysql user table success', async () => {
-    const res = await app.httpRequest()
-      .get('/')
-      .expect(200);
+    const res = await app.httpRequest().get('/').expect(200);
 
     assert.equal(res.body.status, 'success');
     assert.equal(res.body.users.length, 3);

@@ -7,7 +7,7 @@ exports.mysql1 = {
   port: 3306,
   user: 'root',
   password: '',
-  database: 'test'
+  database: 'test',
 };
 
 exports.keys = 'foo';
