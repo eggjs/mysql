@@ -45,6 +45,7 @@
     "@types/mocha": "10",
     "@types/node": "22",
     "egg": "^4.0.10",
+    "husky": "^9.1.7",
     "lint-staged": "^15.5.0",
     "oxlint": "^0.16.2",
     "prettier": "^3.5.3",
@@ -62,7 +63,8 @@
     "ci": "egg-bin cov",
     "postci": "npm run prepublishOnly && npm run clean",
     "clean": "rimraf dist",
-    "prepublishOnly": "tshy && tshy-after && attw --pack"
+    "prepublishOnly": "tshy && tshy-after && attw --pack",
+    "prepare": "husky"
   },
   "lint-staged": {
     "*": "prettier --write --ignore-unknown --cache",
