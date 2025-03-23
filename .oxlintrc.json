@@ -111,6 +111,7 @@
     "unicorn/no-static-only-class": "allow",
     "unicorn/no-typeof-undefined": "error",
     "unicorn/prefer-negative-index": "error",
+    "unicorn/no-anonymous-default-export": "allow",
 
     // oxc
     "oxc/no-map-spread": "error",
