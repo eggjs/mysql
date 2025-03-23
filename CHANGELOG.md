@@ -1,5 +1,39 @@
 # Changelog
 
+## [6.0.0](https://github.com/eggjs/mysql/compare/v5.0.0...v6.0.0) (2025-03-23)
+
+### ⚠ BREAKING CHANGES
+
+- drop Node.js < 18.19.0 support and only support egg>=4
+
+part of https://github.com/eggjs/egg/issues/3644
+
+https://github.com/eggjs/egg/issues/5257
+
+<!-- This is an auto-generated comment: release notes by coderabbit.ai
+-->
+
+## Summary by CodeRabbit
+
+- **New Features**
+- Refined MySQL plugin integration with improved lifecycle management
+  and simplified singleton access.
+- Added a ready-to-use Docker Compose setup for local MySQL development.
+
+- **Documentation**
+- Updated all documentation with the new package name (@eggjs/mysql) and
+  revised usage examples for clarity.
+
+- **Chores**
+  - Enhanced package metadata and dependency management.
+  - Updated CI configuration to support Node.js versions 18, 20, and 22.
+
+<!-- end of auto-generated comment: release notes by coderabbit.ai -->
+
+### Features
+
+- support cjs and esm both by tshy ([#33](https://github.com/eggjs/mysql/issues/33)) ([dfdaa74](https://github.com/eggjs/mysql/commit/dfdaa746641ce31a0fe1e4add167c7483e742bef))
+
 ## [5.0.0](https://github.com/eggjs/egg-mysql/compare/v4.1.0...v5.0.0) (2025-03-08)
 
 ### ⚠ BREAKING CHANGES
